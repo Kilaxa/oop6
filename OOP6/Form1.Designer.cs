@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            trackBar1 = new TrackBar();
             checkBox1 = new CheckBox();
             button1 = new Button();
             button2 = new Button();
@@ -39,22 +38,11 @@
             button_triangle = new Button();
             button_section = new Button();
             button5 = new Button();
+            button6 = new Button();
+            label1 = new Label();
+            trackBar1 = new TrackBar();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
-            // 
-            // trackBar1
-            // 
-            trackBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            trackBar1.Location = new Point(640, 47);
-            trackBar1.Maximum = 100;
-            trackBar1.Minimum = 10;
-            trackBar1.Name = "trackBar1";
-            trackBar1.Size = new Size(151, 56);
-            trackBar1.TabIndex = 1;
-            trackBar1.TabStop = false;
-            trackBar1.TickFrequency = 5;
-            trackBar1.Value = 10;
-            trackBar1.Scroll += trackBar1_Scroll;
             // 
             // checkBox1
             // 
@@ -113,7 +101,7 @@
             // 
             button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button4.FlatStyle = FlatStyle.Flat;
-            button4.Location = new Point(533, 47);
+            button4.Location = new Point(640, 47);
             button4.Name = "button4";
             button4.Size = new Size(100, 35);
             button4.TabIndex = 7;
@@ -182,11 +170,50 @@
             button5.UseVisualStyleBackColor = false;
             button5.Click += button5_Click;
             // 
+            // button6
+            // 
+            button6.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button6.FlatStyle = FlatStyle.Flat;
+            button6.Location = new Point(533, 47);
+            button6.Name = "button6";
+            button6.Size = new Size(100, 35);
+            button6.TabIndex = 13;
+            button6.TabStop = false;
+            button6.Text = "Select All";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.FlatStyle = FlatStyle.Flat;
+            label1.Location = new Point(598, 88);
+            label1.Name = "label1";
+            label1.Size = new Size(39, 20);
+            label1.TabIndex = 14;
+            label1.Text = "Size:";
+            // 
+            // trackBar1
+            // 
+            trackBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            trackBar1.Location = new Point(640, 88);
+            trackBar1.Maximum = 100;
+            trackBar1.Minimum = 10;
+            trackBar1.Name = "trackBar1";
+            trackBar1.Size = new Size(150, 56);
+            trackBar1.TabIndex = 1;
+            trackBar1.TabStop = false;
+            trackBar1.TickFrequency = 5;
+            trackBar1.Value = 10;
+            trackBar1.Scroll += trackBar1_Scroll;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(label1);
+            Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button_section);
             Controls.Add(button_triangle);
@@ -201,6 +228,7 @@
             KeyPreview = true;
             Name = "Form1";
             Text = "Form1";
+            Load += Form1_Load;
             Paint += Form1_Paint;
             KeyDown += Form1_KeyDown;
             KeyUp += Form1_KeyUp;
@@ -211,7 +239,6 @@
         }
 
         #endregion
-        private TrackBar trackBar1;
         private CheckBox checkBox1;
         private Button button1;
         private Button button2;
@@ -222,5 +249,8 @@
         private Button button_triangle;
         private Button button_section;
         private Button button5;
+        private Button button6;
+        private Label label1;
+        private TrackBar trackBar1;
     }
 }

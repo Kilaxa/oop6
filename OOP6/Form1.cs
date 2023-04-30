@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic.Devices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -268,6 +269,26 @@ namespace OOP6
                     break;
             }
             button5.BackColor = color;
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            foreach (Control control in this.Controls)
+            {
+                control.PreviewKeyDown += new PreviewKeyDownEventHandler(control_PreviewKeyDown);
+            }
+        }
+
+        void control_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down || e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
