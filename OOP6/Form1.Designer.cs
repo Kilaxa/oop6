@@ -28,52 +28,176 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBox1 = new ComboBox();
             trackBar1 = new TrackBar();
             checkBox1 = new CheckBox();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            button4 = new Button();
+            button_circle = new Button();
+            button_square = new Button();
+            button_triangle = new Button();
+            button_section = new Button();
+            button5 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Circle", "Square", "Triangle", "Section" });
-            comboBox1.Location = new Point(21, 12);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(151, 28);
-            comboBox1.TabIndex = 0;
-            // 
             // trackBar1
             // 
-            trackBar1.Location = new Point(197, 12);
+            trackBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            trackBar1.Location = new Point(640, 47);
             trackBar1.Maximum = 100;
             trackBar1.Minimum = 10;
             trackBar1.Name = "trackBar1";
             trackBar1.Size = new Size(151, 56);
             trackBar1.TabIndex = 1;
+            trackBar1.TabStop = false;
             trackBar1.TickFrequency = 5;
             trackBar1.Value = 10;
             trackBar1.Scroll += trackBar1_Scroll;
             // 
             // checkBox1
             // 
+            checkBox1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             checkBox1.AutoSize = true;
-            checkBox1.Location = new Point(726, 12);
+            checkBox1.FlatStyle = FlatStyle.Flat;
+            checkBox1.Location = new Point(729, 12);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(62, 24);
+            checkBox1.Size = new Size(58, 24);
             checkBox1.TabIndex = 2;
+            checkBox1.TabStop = false;
             checkBox1.Text = "Cntrl";
             checkBox1.UseVisualStyleBackColor = true;
             checkBox1.CheckedChanged += checkBox1_CheckedChanged;
+            // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.Location = new Point(683, 6);
+            button1.Name = "button1";
+            button1.Size = new Size(35, 35);
+            button1.TabIndex = 3;
+            button1.TabStop = false;
+            button1.Text = "+";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button2.FlatStyle = FlatStyle.Flat;
+            button2.Location = new Point(640, 6);
+            button2.Name = "button2";
+            button2.Size = new Size(35, 35);
+            button2.TabIndex = 4;
+            button2.TabStop = false;
+            button2.Text = "-";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Location = new Point(533, 6);
+            button3.Name = "button3";
+            button3.Size = new Size(100, 35);
+            button3.TabIndex = 5;
+            button3.TabStop = false;
+            button3.Text = "Delete";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
+            // 
+            // button4
+            // 
+            button4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button4.FlatStyle = FlatStyle.Flat;
+            button4.Location = new Point(533, 47);
+            button4.Name = "button4";
+            button4.Size = new Size(100, 35);
+            button4.TabIndex = 7;
+            button4.TabStop = false;
+            button4.Text = "Unselect All";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
+            // button_circle
+            // 
+            button_circle.BackgroundImage = Properties.Resources.free_icon_circle_5886755;
+            button_circle.BackgroundImageLayout = ImageLayout.Stretch;
+            button_circle.FlatStyle = FlatStyle.Flat;
+            button_circle.Location = new Point(12, 12);
+            button_circle.Name = "button_circle";
+            button_circle.Size = new Size(50, 50);
+            button_circle.TabIndex = 8;
+            button_circle.UseVisualStyleBackColor = true;
+            button_circle.Click += button_circle_Click;
+            // 
+            // button_square
+            // 
+            button_square.BackgroundImage = Properties.Resources.free_icon_square_5888641;
+            button_square.BackgroundImageLayout = ImageLayout.Stretch;
+            button_square.FlatStyle = FlatStyle.Flat;
+            button_square.Location = new Point(68, 12);
+            button_square.Name = "button_square";
+            button_square.Size = new Size(50, 50);
+            button_square.TabIndex = 9;
+            button_square.UseVisualStyleBackColor = true;
+            button_square.Click += button_square_Click;
+            // 
+            // button_triangle
+            // 
+            button_triangle.BackgroundImage = Properties.Resources.free_icon_triangle_5888654;
+            button_triangle.BackgroundImageLayout = ImageLayout.Stretch;
+            button_triangle.FlatStyle = FlatStyle.Flat;
+            button_triangle.Location = new Point(124, 12);
+            button_triangle.Name = "button_triangle";
+            button_triangle.Size = new Size(50, 50);
+            button_triangle.TabIndex = 10;
+            button_triangle.UseVisualStyleBackColor = true;
+            button_triangle.Click += button_triangle_Click;
+            // 
+            // button_section
+            // 
+            button_section.BackgroundImage = Properties.Resources.free_icon_minus_339879;
+            button_section.BackgroundImageLayout = ImageLayout.Stretch;
+            button_section.FlatStyle = FlatStyle.Flat;
+            button_section.Location = new Point(180, 12);
+            button_section.Name = "button_section";
+            button_section.Size = new Size(50, 50);
+            button_section.TabIndex = 11;
+            button_section.UseVisualStyleBackColor = true;
+            button_section.Click += button_section_Click;
+            // 
+            // button5
+            // 
+            button5.BackColor = Color.Red;
+            button5.BackgroundImageLayout = ImageLayout.Stretch;
+            button5.FlatStyle = FlatStyle.Flat;
+            button5.Location = new Point(279, 12);
+            button5.Name = "button5";
+            button5.Size = new Size(50, 50);
+            button5.TabIndex = 12;
+            button5.UseVisualStyleBackColor = false;
+            button5.Click += button5_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button5);
+            Controls.Add(button_section);
+            Controls.Add(button_triangle);
+            Controls.Add(button_square);
+            Controls.Add(button_circle);
+            Controls.Add(button4);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(button1);
             Controls.Add(checkBox1);
             Controls.Add(trackBar1);
-            Controls.Add(comboBox1);
             KeyPreview = true;
             Name = "Form1";
             Text = "Form1";
@@ -87,9 +211,16 @@
         }
 
         #endregion
-
-        private ComboBox comboBox1;
         private TrackBar trackBar1;
         private CheckBox checkBox1;
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private Button button4;
+        private Button button_circle;
+        private Button button_square;
+        private Button button_triangle;
+        private Button button_section;
+        private Button button5;
     }
 }

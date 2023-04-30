@@ -1,6 +1,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using static OOP6.Form1;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
@@ -11,6 +12,16 @@ namespace OOP6
         private List<CFigure> figures = new List<CFigure>(); // Ћист дл€ хранени€ всех фигур
         public int objectSize = 10;
         public bool Cntrl;
+
+        Color color = Color.Red;
+        Color red = Color.Red;
+        Color green = Color.Green;
+        Color purple = Color.RebeccaPurple;
+        Color black = Color.Black;
+        int colorIndex = 0;
+
+        int selectedFigure = 0;
+
         public Form1()
         {
             InitializeComponent();
@@ -33,25 +44,25 @@ namespace OOP6
                     figure.setCondition(false);
                 }
 
-                switch (comboBox1.SelectedIndex)
+                switch (selectedFigure)
                 {
                     case 0:
-                        CCircle newcircle = new CCircle(e.X, e.Y, objectSize);
+                        CCircle newcircle = new CCircle(e.X, e.Y, objectSize, color);
                         newcircle.setCondition(true);
                         figures.Add(newcircle);
                         break;
                     case 1:
-                        CSquare newsquare = new CSquare(e.X, e.Y, objectSize);
+                        CSquare newsquare = new CSquare(e.X, e.Y, objectSize, color);
                         newsquare.setCondition(true);
                         figures.Add((newsquare));
                         break;
                     case 2:
-                        CTriangle newtriangle = new CTriangle(e.X, e.Y, objectSize);
+                        CTriangle newtriangle = new CTriangle(e.X, e.Y, objectSize, color);
                         newtriangle.setCondition(true);
                         figures.Add((newtriangle));
                         break;
                     case 3:
-                        CSection newsection = new CSection(e.X, e.Y, objectSize);
+                        CSection newsection = new CSection(e.X, e.Y, objectSize, color);
                         newsection.setCondition(true);
                         figures.Add((newsection));
                         break;
@@ -88,6 +99,63 @@ namespace OOP6
             {
                 checkBox1.Checked = true;
             }
+            else if (e.KeyCode == Keys.Delete)
+            {
+                DelFigures();
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                foreach (CFigure figure in figures)
+                {
+                    if (figure.selected && ((figure.coords.Y - figure.rad) > 0))
+                    {
+                        figure.coords.Y -= 3;
+                    }
+                }
+                Refresh();
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                foreach (CFigure figure in figures)
+                {
+                    if (figure.selected && ((figure.coords.Y + figure.rad) < (int)this.ClientSize.Height))
+                    {
+                        figure.coords.Y += 3;
+                    }
+                }
+                Refresh();
+            }
+            else if (e.KeyCode == Keys.Left)
+            {
+                foreach (CFigure figure in figures)
+                {
+                    if (figure.selected && ((figure.coords.X - figure.rad) > 0))
+                    {
+                        figure.coords.X -= 3;
+                    }
+                }
+                Refresh();
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                foreach (CFigure figure in figures)
+                {
+                    if (figure.selected && ((figure.coords.X + figure.rad) < (int)this.ClientSize.Width))
+                    {
+                        figure.coords.X += 3;
+                    }
+                }
+                Refresh();
+            }
+
+            else if (e.KeyCode == Keys.Oemplus)
+            {
+                GetBigger();
+            }
+            else if (e.KeyCode == Keys.OemMinus)
+            {
+                GetSmaller();
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -97,6 +165,109 @@ namespace OOP6
             {
                 figure.fcntrl = Cntrl;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GetBigger();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            GetSmaller();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DelFigures();
+        }
+
+        private void GetSmaller()
+        {
+            foreach (CFigure figure in figures)
+            {
+                if (figure.selected && figure.rad > 10)
+                {
+                    figure.rad -= 5;
+                }
+            }
+            Refresh();
+        }
+        private void GetBigger()
+        {
+            foreach (CFigure figure in figures)
+            {
+                if (figure.selected && figure.rad <= 95)
+                {
+                    figure.rad += 5;
+                }
+            }
+            Refresh();
+        }
+        void DelFigures() // ћетод удалени€ фигур
+        {
+            for (int i = 0; i < figures.Count; i++)
+            {
+                if (figures[i].selected == true)
+                {
+                    figures.Remove(figures[i]);
+                    i--;
+                }
+            }
+            Refresh();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            foreach (CFigure figure in figures) // сн€тие выделени€ со всех объектов
+            {
+                figure.setCondition(false);
+            }
+            Refresh();
+        }
+
+        private void button_circle_Click(object sender, EventArgs e)
+        {
+            selectedFigure = 0;
+        }
+
+        private void button_square_Click(object sender, EventArgs e)
+        {
+            selectedFigure = 1;
+        }
+
+        private void button_triangle_Click(object sender, EventArgs e)
+        {
+            selectedFigure = 2;
+        }
+
+        private void button_section_Click(object sender, EventArgs e)
+        {
+            selectedFigure = 3;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (colorIndex < 3)
+                colorIndex++;
+            else
+                colorIndex = 0;
+            switch (colorIndex)
+            {
+                case 0:
+                    color = red;
+                    break;
+                case 1:
+                    color = green;
+                    break;
+                case 2:
+                    color = purple;
+                    break;
+                case 3:
+                    color = black;
+                    break;
+            }
+            button5.BackColor = color;
         }
     }
 }
@@ -127,11 +298,12 @@ public class CFigure
 }
 public class CCircle : CFigure// класс круга
 {
-    public CCircle(int x, int y, int radius) // конструктор по умолчанию
+    public CCircle(int x, int y, int radius, Color color) // конструктор по умолчанию
     {
         coords.X = x;
         coords.Y = y;
         rad = radius;
+        colorF = color;
     }
     public override void SelfDraw(Graphics g) // ћетод дл€ отрисовки самого себ€
     {
@@ -157,11 +329,12 @@ public class CCircle : CFigure// класс круга
 
 public class CSquare : CFigure // класс квадрата
 {
-    public CSquare(int x, int y, int radius) // конструктор по умолчанию
+    public CSquare(int x, int y, int radius, Color color) // конструктор по умолчанию
     {
         coords.X = x;
         coords.Y = y;
         rad = radius;
+        colorF = color;
     }
     public override void SelfDraw(Graphics g) // ћетод дл€ отрисовки самого себ€
     {
@@ -187,11 +360,12 @@ public class CSquare : CFigure // класс квадрата
 
 public class CTriangle : CFigure // класс треугольника
 {
-    public CTriangle(int x, int y, int radius) // конструктор по умолчанию
+    public CTriangle(int x, int y, int radius, Color color) // конструктор по умолчанию
     {
         coords.X = x;
         coords.Y = y;
         rad = radius;
+        colorF = color;
     }
     public override void SelfDraw(Graphics g) // ћетод дл€ отрисовки самого себ€
     {
@@ -221,11 +395,12 @@ public class CTriangle : CFigure // класс треугольника
 
 public class CSection : CFigure // класс отрезка
 {
-    public CSection(int x, int y, int radius) // конструктор по умолчанию
+    public CSection(int x, int y, int radius, Color color) // конструктор по умолчанию
     {
         coords.X = x;
         coords.Y = y;
         rad = radius;
+        colorF = color;
     }
     public override void SelfDraw(Graphics g) // ћетод дл€ отрисовки самого себ€
     {
