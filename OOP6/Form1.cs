@@ -269,6 +269,11 @@ namespace OOP6
                     break;
             }
             button5.BackColor = color;
+            foreach(CFigure figure in figures)
+            {
+                if (figure.selected)
+                    figure.colorF = color;
+            }
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -288,7 +293,11 @@ namespace OOP6
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            foreach (CFigure figure in figures) // выделения всех объектов
+            {
+                figure.setCondition(true);
+            }
+            Refresh();
         }
     }
 }
