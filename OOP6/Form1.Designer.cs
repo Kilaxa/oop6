@@ -39,7 +39,6 @@
             button_section = new Button();
             button5 = new Button();
             button6 = new Button();
-            label1 = new Label();
             trackBar1 = new TrackBar();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
@@ -183,16 +182,6 @@
             button6.UseVisualStyleBackColor = true;
             button6.Click += button6_Click;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.FlatStyle = FlatStyle.Flat;
-            label1.Location = new Point(598, 88);
-            label1.Name = "label1";
-            label1.Size = new Size(39, 20);
-            label1.TabIndex = 14;
-            label1.Text = "Size:";
-            // 
             // trackBar1
             // 
             trackBar1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
@@ -212,7 +201,6 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(label1);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button_section);
@@ -250,7 +238,6 @@
         private Button button_section;
         private Button button5;
         private Button button6;
-        private Label label1;
         private TrackBar trackBar1;
     }
 }
