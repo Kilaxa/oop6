@@ -1,4 +1,5 @@
 using Microsoft.VisualBasic.Devices;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace OOP6
 
         int selectedFigure = 0;
 
+        int allgindex = 1;
         public Form1()
         {
             InitializeComponent();
@@ -76,8 +78,32 @@ namespace OOP6
                 {
                     if (figure.MouseCheck(e))
                     {
-                        figure.setCondition(true);
+                        if (figure.gindex != 0)
+                        {
+                            foreach (CFigure cFigure in figures)
+                            {
+                                if (cFigure.gindex == figure.gindex)
+                                {
+                                    cFigure.setCondition(true);
+                                }
+                            }
+                        }
+                        else
+                            figure.setCondition(true);
                         break;
+                    }
+                }
+                foreach(CFigure figure in figures)
+                {
+                    if(figure.MouseCheck(e) && figure.gindex != 0)
+                    {
+                        foreach(CFigure cFigure in figures)
+                        {
+                            if(cFigure.gindex == figure.gindex)
+                            {
+                                cFigure.setCondition(true);
+                            }
+                        }
                     }
                 }
                 Refresh();
@@ -269,7 +295,7 @@ namespace OOP6
                     break;
             }
             button5.BackColor = color;
-            foreach(CFigure figure in figures)
+            foreach (CFigure figure in figures)
             {
                 if (figure.selected)
                     figure.colorF = color;
@@ -299,6 +325,18 @@ namespace OOP6
             }
             Refresh();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            CGroup newgroup = new CGroup();
+            foreach(CFigure figure in figures)
+            {
+                if(figure.selected)
+                    newgroup.Add(figure, allgindex);
+            }
+            figures.Add(newgroup);
+            allgindex++;
+        }
     }
 }
 
@@ -308,11 +346,12 @@ public class CFigure
     public int rad;
     public bool selected = false;
     public bool fcntrl = false;
+    public int gindex = 0;
 
     public Color colorT = Color.CornflowerBlue;
     public Color colorF = Color.Purple;
 
-    public void setCondition(bool cond) // метод переключения выделения
+    public virtual void setCondition(bool cond) // метод переключения выделения
     {
         selected = cond;
     }
@@ -455,4 +494,40 @@ public class CSection : CFigure // класс отрезка
         }
         return false;
     }
+}
+
+class CGroup : CFigure
+{
+    public List<CFigure> children = new List<CFigure>();
+
+    public void Add(CFigure component, int index)
+    {
+        component.gindex = index;
+        component.colorF = Color.DarkCyan;
+        children.Add(component);
+    }
+
+    public void Remove(CFigure component)
+    {
+        children.Remove(component);
+    }
+
+    //public override void setCondition(bool cond) // метод переключения выделения
+    //{
+    //    foreach (CFigure child in children)
+    //    {
+    //        child.setCondition(cond);
+    //    }
+    //}
+
+    //public override bool MouseCheck(MouseEventArgs e)
+    //{
+    //    foreach(CFigure child in children)
+    //    {
+    //        if(child.MouseCheck(e))
+    //            return true;
+    //    }
+    //    return false;
+    //}
+
 }

@@ -40,6 +40,7 @@
             button5 = new Button();
             button6 = new Button();
             trackBar1 = new TrackBar();
+            button7 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -196,11 +197,25 @@
             trackBar1.Value = 10;
             trackBar1.Scroll += trackBar1_Scroll;
             // 
+            // button7
+            // 
+            button7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button7.FlatStyle = FlatStyle.Flat;
+            button7.Location = new Point(427, 6);
+            button7.Name = "button7";
+            button7.Size = new Size(100, 35);
+            button7.TabIndex = 14;
+            button7.TabStop = false;
+            button7.Text = "Group";
+            button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button7);
             Controls.Add(button6);
             Controls.Add(button5);
             Controls.Add(button_section);
@@ -239,5 +254,6 @@
         private Button button5;
         private Button button6;
         private TrackBar trackBar1;
+        private Button button7;
     }
 }
