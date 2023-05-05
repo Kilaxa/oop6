@@ -11,7 +11,7 @@ namespace OOP6
     public partial class Form1 : Form
     {
         private List<CFigure> figures = new List<CFigure>(); // Лист для хранения всех фигур
-        public int objectSize = 10;
+        public int objectSize = 20;
         public bool Cntrl;
 
         Color color = Color.Red;
@@ -80,6 +80,7 @@ namespace OOP6
                         break;
                     }
                 }
+
                 Refresh();
             }
         }
@@ -108,10 +109,7 @@ namespace OOP6
             {
                 foreach (CFigure figure in figures)
                 {
-                    if (figure.selected && ((figure.coords.Y - figure.rad) > 0))
-                    {
-                        figure.coords.Y -= 3;
-                    }
+                    figure.MoveUp(this);
                 }
                 Refresh();
             }
@@ -119,10 +117,7 @@ namespace OOP6
             {
                 foreach (CFigure figure in figures)
                 {
-                    if (figure.selected && ((figure.coords.Y + figure.rad) < (int)this.ClientSize.Height))
-                    {
-                        figure.coords.Y += 3;
-                    }
+                    figure.MoveDown(this);
                 }
                 Refresh();
             }
@@ -130,10 +125,7 @@ namespace OOP6
             {
                 foreach (CFigure figure in figures)
                 {
-                    if (figure.selected && ((figure.coords.X - figure.rad) > 0))
-                    {
-                        figure.coords.X -= 3;
-                    }
+                    figure.MoveLeft(this);
                 }
                 Refresh();
             }
@@ -141,10 +133,7 @@ namespace OOP6
             {
                 foreach (CFigure figure in figures)
                 {
-                    if (figure.selected && ((figure.coords.X + figure.rad) < (int)this.ClientSize.Width))
-                    {
-                        figure.coords.X += 3;
-                    }
+                    figure.MoveRight(this);
                 }
                 Refresh();
             }
@@ -164,7 +153,7 @@ namespace OOP6
             Cntrl = checkBox1.Checked;
             foreach (CFigure figure in figures)
             {
-                figure.fcntrl = Cntrl;
+                figure.Cntrled(Cntrl);
             }
         }
 
@@ -269,7 +258,7 @@ namespace OOP6
                     break;
             }
             button5.BackColor = color;
-            foreach(CFigure figure in figures)
+            foreach (CFigure figure in figures)
             {
                 if (figure.selected)
                     figure.colorF = color;
@@ -299,11 +288,35 @@ namespace OOP6
             }
             Refresh();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            CGroup newgroup = new CGroup();
+            foreach (CFigure figure in figures)
+            {
+                if (figure.selected)
+                {
+                    newgroup.Add(figure);
+                }
+            }
+            newgroup.iAmGroup = true;
+            foreach (CFigure figure in newgroup.childrens)
+            {
+                if (!figure.iAmGroup)
+                {
+                    figures.Remove(figure);
+                }
+            }
+
+            figures.Add(newgroup);
+            Refresh();
+        }
     }
 }
 
 public class CFigure
 {
+    public bool iAmGroup = false;
     public Point coords;
     public int rad;
     public bool selected = false;
@@ -312,7 +325,12 @@ public class CFigure
     public Color colorT = Color.CornflowerBlue;
     public Color colorF = Color.Purple;
 
-    public void setCondition(bool cond) // метод переключения выделения
+    public virtual void Cntrled(bool pressed)
+    {
+        fcntrl = pressed;
+    }
+
+    public virtual void setCondition(bool cond) // метод переключения выделения
     {
         selected = cond;
     }
@@ -322,7 +340,90 @@ public class CFigure
     }
     public virtual bool MouseCheck(MouseEventArgs e) // Проверка объекта на попадание в него курсора
     {
+        if (fcntrl)
+        {
+            if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
+            {
+                selected = true;
+                return true;
+            }
+        }
         return false;
+    }
+
+    public virtual bool CanMoveUp(Form form)
+    {
+        if (((coords.Y - rad) > 0))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public virtual bool CanMoveDown(Form form)
+    {
+        if ((coords.Y + rad) < (int)form.ClientSize.Height)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public virtual bool CanMoveLeft(Form form)
+    {
+        if ((coords.X - rad) > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public virtual bool CanMoveRight(Form form)
+    {
+        if ((coords.X + rad) < (int)form.ClientSize.Width)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public virtual void MoveUp(Form form)
+    {
+        if (selected && CanMoveUp(form))
+        {
+            coords.Y -= 1;
+        }
+    }
+    public virtual void MoveDown(Form form)
+    {
+        if (selected && CanMoveDown(form))
+        {
+            coords.Y += 1;
+        }
+    }
+    public virtual void MoveLeft(Form form)
+    {
+        if (selected && CanMoveLeft(form))
+        {
+            coords.X -= 1;
+        }
+    }
+
+    public virtual void MoveRight(Form form)
+    {
+        if (selected && CanMoveRight(form))
+        {
+            coords.X += 1;
+        }
     }
 
 }
@@ -454,5 +555,157 @@ public class CSection : CFigure // класс отрезка
             }
         }
         return false;
+    }
+}
+
+class CGroup : CFigure
+{
+    public List<CFigure> childrens = new List<CFigure>();
+
+    public void Add(CFigure component)
+    {
+        component.colorF = Color.DarkCyan;
+        component.setCondition(false);
+        childrens.Add(component);
+    }
+
+    public void Remove(CFigure component)
+    {
+        childrens.Remove(component);
+    }
+
+    public override void Cntrled(bool pressed)
+    {
+        foreach (CFigure component in childrens)
+        {
+            component.fcntrl = pressed;
+        }
+    }
+
+    public override void setCondition(bool cond)
+    {
+        foreach (CFigure child in childrens)
+        {
+            child.setCondition(cond);
+        }
+        selected = cond;
+    }
+
+    public override void SelfDraw(Graphics g)
+    {
+        foreach (CFigure child in childrens)
+        {
+            child.SelfDraw(g);
+        }
+    }
+
+    public override bool MouseCheck(MouseEventArgs e)
+    {
+        foreach (CFigure child in childrens)
+        {
+            if (child.MouseCheck(e))
+                return true;
+        }
+        return false;
+    }
+
+    public override bool CanMoveUp(Form form)
+    {
+        foreach (CFigure child in childrens)
+        {
+            if (!child.CanMoveUp(form))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public override bool CanMoveDown(Form form)
+    {
+        foreach (CFigure child in childrens)
+        {
+            if (!child.CanMoveDown(form))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public override bool CanMoveLeft(Form form)
+    {
+        foreach (CFigure child in childrens)
+        {
+            if (!child.CanMoveLeft(form))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    public override bool CanMoveRight(Form form)
+    {
+        foreach (CFigure child in childrens)
+        {
+            if (!child.CanMoveRight(form))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public override void MoveUp(Form form)
+    {
+        if (CanMoveUp(form))
+        {
+            foreach (CFigure child in childrens)
+            {
+                if (!child.iAmGroup)
+                {
+                    child.MoveUp(form);
+                }
+            }
+        }
+
+    }
+    public override void MoveDown(Form form)
+    {
+        if (CanMoveDown(form))
+        {
+            foreach (CFigure child in childrens)
+            {
+                if (!child.iAmGroup)
+                {
+                    child.MoveDown(form);
+                }
+            }
+        }
+    }
+    public override void MoveLeft(Form form)
+    {
+        if (CanMoveLeft(form))
+        {
+            foreach (CFigure child in childrens)
+            {
+                if (!child.iAmGroup)
+                {
+                    child.MoveLeft(form);
+                }
+            }
+        }
+    }
+    public override void MoveRight(Form form)
+    {
+        if (CanMoveRight(form))
+        {
+            foreach (CFigure child in childrens)
+            {
+                if (!child.iAmGroup)
+                {
+                    child.MoveRight(form);
+                }
+            }
+        }
+
     }
 }
