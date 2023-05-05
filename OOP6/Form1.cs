@@ -80,7 +80,6 @@ namespace OOP6
                         break;
                     }
                 }
-
                 Refresh();
             }
         }
@@ -302,10 +301,7 @@ namespace OOP6
             newgroup.iAmGroup = true;
             foreach (CFigure figure in newgroup.childrens)
             {
-                if (!figure.iAmGroup)
-                {
-                    figures.Remove(figure);
-                }
+                figures.Remove(figure);
             }
 
             figures.Add(newgroup);
@@ -340,14 +336,6 @@ public class CFigure
     }
     public virtual bool MouseCheck(MouseEventArgs e) // Проверка объекта на попадание в него курсора
     {
-        if (fcntrl)
-        {
-            if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
-            {
-                selected = true;
-                return true;
-            }
-        }
         return false;
     }
 
@@ -569,17 +557,13 @@ class CGroup : CFigure
         childrens.Add(component);
     }
 
-    public void Remove(CFigure component)
-    {
-        childrens.Remove(component);
-    }
-
     public override void Cntrled(bool pressed)
     {
         foreach (CFigure component in childrens)
         {
             component.fcntrl = pressed;
         }
+        fcntrl = pressed;
     }
 
     public override void setCondition(bool cond)
@@ -604,7 +588,9 @@ class CGroup : CFigure
         foreach (CFigure child in childrens)
         {
             if (child.MouseCheck(e))
+            {
                 return true;
+            }
         }
         return false;
     }
@@ -660,10 +646,7 @@ class CGroup : CFigure
         {
             foreach (CFigure child in childrens)
             {
-                if (!child.iAmGroup)
-                {
-                    child.MoveUp(form);
-                }
+                child.MoveUp(form);
             }
         }
 
@@ -674,10 +657,7 @@ class CGroup : CFigure
         {
             foreach (CFigure child in childrens)
             {
-                if (!child.iAmGroup)
-                {
-                    child.MoveDown(form);
-                }
+                child.MoveDown(form);
             }
         }
     }
@@ -687,10 +667,7 @@ class CGroup : CFigure
         {
             foreach (CFigure child in childrens)
             {
-                if (!child.iAmGroup)
-                {
-                    child.MoveLeft(form);
-                }
+                child.MoveLeft(form);
             }
         }
     }
@@ -700,10 +677,7 @@ class CGroup : CFigure
         {
             foreach (CFigure child in childrens)
             {
-                if (!child.iAmGroup)
-                {
-                    child.MoveRight(form);
-                }
+                child.MoveRight(form);
             }
         }
 
