@@ -1,6 +1,9 @@
 using Microsoft.VisualBasic.Devices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Printing;
+using System.Security.Policy;
+using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using static OOP6.Form1;
@@ -10,6 +13,9 @@ namespace OOP6
 {
     public partial class Form1 : Form
     {
+        SavedData savedData = new SavedData();
+        SaverLoader loader = new SaverLoader();
+
         private List<CFigure> figures = new List<CFigure>(); // Лист для хранения всех фигур
         public int objectSize = 20;
         public bool Cntrl;
@@ -139,11 +145,19 @@ namespace OOP6
 
             else if (e.KeyCode == Keys.Oemplus)
             {
-                GetBigger();
+                foreach (CFigure figure in figures)
+                {
+                    figure.GetBigger();
+                }
+                Refresh();
             }
             else if (e.KeyCode == Keys.OemMinus)
             {
-                GetSmaller();
+                foreach (CFigure figure in figures)
+                {
+                    figure.GetSmaller();
+                }
+                Refresh();
             }
         }
 
@@ -158,12 +172,20 @@ namespace OOP6
 
         private void button1_Click(object sender, EventArgs e)
         {
-            GetBigger();
+            foreach (CFigure figure in figures)
+            {
+                figure.GetBigger();
+            }
+            Refresh();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            GetSmaller();
+            foreach (CFigure figure in figures)
+            {
+                figure.GetSmaller();
+            }
+            Refresh();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -171,28 +193,6 @@ namespace OOP6
             DelFigures();
         }
 
-        private void GetSmaller()
-        {
-            foreach (CFigure figure in figures)
-            {
-                if (figure.selected && figure.rad > 10)
-                {
-                    figure.rad -= 5;
-                }
-            }
-            Refresh();
-        }
-        private void GetBigger()
-        {
-            foreach (CFigure figure in figures)
-            {
-                if (figure.selected && figure.rad <= 95)
-                {
-                    figure.rad += 5;
-                }
-            }
-            Refresh();
-        }
         void DelFigures() // Метод удаления фигур
         {
             for (int i = 0; i < figures.Count; i++)
@@ -288,7 +288,7 @@ namespace OOP6
             Refresh();
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        void Group()
         {
             CGroup newgroup = new CGroup();
             foreach (CFigure figure in figures)
@@ -303,24 +303,115 @@ namespace OOP6
             {
                 figures.Remove(figure);
             }
-
             figures.Add(newgroup);
             Refresh();
         }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Group();
+        }
+
+        private void saveMe()
+        {
+            foreach (CFigure figure in figures)
+            {
+                figure.SelfSave(savedData);
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            saveMe();
+            loader.Save(savedData, "D:\\test.txt");
+        }
+        CFigure read(StreamReader sr)
+        {
+            string line = sr.ReadLine();
+            string[] data = line.Split(';');
+            switch (data[0])
+            {
+                case "CGroup":
+                    {
+                        int count = int.Parse(data[1]);
+                        CGroup newfigure = new CGroup();
+                        for (int i = 0; i < count; i++)
+                        {
+                            newfigure.Add(read(sr));
+                        }
+                        return newfigure;
+                    }
+                default:
+                    {
+                        int x = int.Parse(data[2]);
+                        int y = int.Parse(data[3]);
+                        int rad = int.Parse(data[4]);
+                        bool selected = bool.Parse(data[5]);
+                        Color color = Color.FromArgb(int.Parse(data[1]));
+                        switch (data[0])
+                        {
+                            case "CCircle":
+                                {
+                                    CCircle newfigure = new CCircle(x, y, rad, color);
+                                    newfigure.setCondition(selected);
+                                    return newfigure;
+                                }
+                            case "CSquare":
+                                {
+                                    CSquare newfigure = new CSquare(x, y, rad, color);
+                                    newfigure.setCondition(selected);
+                                    return newfigure;
+                                }
+                            case "CTriangle":
+                                {
+                                    CTriangle newfigure = new CTriangle(x, y, rad, color);
+                                    newfigure.setCondition(selected);
+                                    return newfigure;
+                                }
+                            case "CSection":
+                                {
+                                    CSection newfigure = new CSection(x, y, rad, color);
+                                    newfigure.setCondition(selected);
+                                    return newfigure;
+                                }
+                        }
+                        return null;
+                    }
+            }
+        }
+        private void button9_Click(object sender, EventArgs e)
+        {
+            foreach(CFigure figure in figures)
+            {
+                figure.setCondition(true);
+            }
+            DelFigures();
+
+            StreamReader sr = new StreamReader("D:\\test.txt");
+
+            while (!sr.EndOfStream)
+            {
+                figures.Add(read(sr));
+            }
+            sr.Close();
+            Refresh();
+        }
+
+
     }
 }
 
 public class CFigure
 {
-    public bool iAmGroup = false;
+    public List<CFigure> childrens;
     public Point coords;
     public int rad;
     public bool selected = false;
     public bool fcntrl = false;
+    public bool iAmGroup = false;
 
     public Color colorT = Color.CornflowerBlue;
     public Color colorF = Color.Purple;
-
     public virtual void Cntrled(bool pressed)
     {
         fcntrl = pressed;
@@ -334,9 +425,35 @@ public class CFigure
     {
 
     }
+    public virtual void SelfSave(SavedData savedData) // Метод для сохранения самого себя
+    {
+        StringBuilder line = new StringBuilder();
+        line.Append(ToString()).Append(";");
+        line.Append(colorF.ToArgb()).Append(";");
+        line.Append(coords.X.ToString()).Append(";");
+        line.Append(coords.Y.ToString()).Append(";");
+        line.Append(rad.ToString()).Append(";");
+        line.Append(selected.ToString()).Append(";");
+        savedData.linesToWrite.Add(line.ToString());
+    }
     public virtual bool MouseCheck(MouseEventArgs e) // Проверка объекта на попадание в него курсора
     {
         return false;
+    }
+
+    public virtual void GetSmaller()
+    {
+        if (selected && rad > 10)
+        {
+            rad -= 5;
+        }
+    }
+    public virtual void GetBigger()
+    {
+        if (selected && rad <= 95)
+        {
+            rad += 5;
+        }
     }
 
     public virtual bool CanMoveUp(Form form)
@@ -437,7 +554,7 @@ public class CCircle : CFigure// класс круга
         {
             if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
             {
-                selected = true;
+                setCondition(true);
                 return true;
             }
         }
@@ -469,7 +586,7 @@ public class CSquare : CFigure // класс квадрата
         {
             if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
             {
-                selected = true;
+                setCondition(true);
                 return true;
             }
         }
@@ -504,7 +621,7 @@ public class CTriangle : CFigure // класс треугольника
         {
             if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
             {
-                selected = true;
+                setCondition(true);
                 return true;
             }
         }
@@ -538,7 +655,7 @@ public class CSection : CFigure // класс отрезка
         {
             if (Math.Pow(e.X - coords.X, 2) + Math.Pow(e.Y - coords.Y, 2) <= Math.Pow(rad, 2) && !selected)
             {
-                selected = true;
+                setCondition(true);
                 return true;
             }
         }
@@ -550,6 +667,10 @@ class CGroup : CFigure
 {
     public List<CFigure> childrens = new List<CFigure>();
 
+    public CGroup()
+    {
+
+    }
     public void Add(CFigure component)
     {
         component.colorF = Color.DarkCyan;
@@ -582,6 +703,17 @@ class CGroup : CFigure
             child.SelfDraw(g);
         }
     }
+    public override void SelfSave(SavedData savedData)
+    {
+        StringBuilder tmp = new StringBuilder();
+        tmp.Append(ToString()).Append(";");
+        tmp.Append(childrens.Count().ToString()).Append(";");
+        savedData.linesToWrite.Add(tmp.ToString());
+        foreach (CFigure figure in childrens)
+        {
+            figure.SelfSave(savedData);
+        }
+    }
 
     public override bool MouseCheck(MouseEventArgs e)
     {
@@ -593,6 +725,21 @@ class CGroup : CFigure
             }
         }
         return false;
+    }
+
+    public override void GetSmaller()
+    {
+        foreach (CFigure child in childrens)
+        {
+            child.GetSmaller();
+        }
+    }
+    public override void GetBigger()
+    {
+        foreach (CFigure child in childrens)
+        {
+            child.GetBigger();
+        }
     }
 
     public override bool CanMoveUp(Form form)
@@ -681,5 +828,22 @@ class CGroup : CFigure
             }
         }
 
+    }
+}
+
+public class SavedData
+{
+    public List<string> linesToWrite = new List<string>();
+    public void Add(string line)
+    {
+        linesToWrite.Add(line);
+    }
+}
+
+public class SaverLoader
+{
+    public void Save(SavedData savedData, string way)
+    {
+        File.WriteAllLines(way, savedData.linesToWrite);
     }
 }

@@ -41,6 +41,8 @@
             button6 = new Button();
             trackBar1 = new TrackBar();
             button7 = new Button();
+            button8 = new Button();
+            button9 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -210,11 +212,39 @@
             button7.UseVisualStyleBackColor = true;
             button7.Click += button7_Click;
             // 
+            // button8
+            // 
+            button8.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button8.FlatStyle = FlatStyle.Flat;
+            button8.Location = new Point(427, 6);
+            button8.Name = "button8";
+            button8.Size = new Size(100, 35);
+            button8.TabIndex = 15;
+            button8.TabStop = false;
+            button8.Text = "Save";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
+            // 
+            // button9
+            // 
+            button9.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button9.FlatStyle = FlatStyle.Flat;
+            button9.Location = new Point(427, 47);
+            button9.Name = "button9";
+            button9.Size = new Size(100, 35);
+            button9.TabIndex = 16;
+            button9.TabStop = false;
+            button9.Text = "Load";
+            button9.UseVisualStyleBackColor = true;
+            button9.Click += button9_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button9);
+            Controls.Add(button8);
             Controls.Add(button7);
             Controls.Add(button6);
             Controls.Add(button5);
@@ -255,5 +285,7 @@
         private Button button6;
         private TrackBar trackBar1;
         private Button button7;
+        private Button button8;
+        private Button button9;
     }
 }
