@@ -323,6 +323,7 @@ namespace OOP6
         private void button8_Click(object sender, EventArgs e)
         {
             saveMe();
+            File.Delete("D:\\test.txt");
             loader.Save(savedData, "D:\\test.txt");
         }
         CFigure read(StreamReader sr)
