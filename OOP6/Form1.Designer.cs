@@ -31,7 +31,7 @@
             checkBox1 = new CheckBox();
             button1 = new Button();
             button2 = new Button();
-            button3 = new Button();
+            button_3 = new Button();
             button4 = new Button();
             button_circle = new Button();
             button_square = new Button();
@@ -43,6 +43,7 @@
             button7 = new Button();
             button8 = new Button();
             button9 = new Button();
+            treeView1 = new TreeView();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -86,18 +87,18 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // button3
+            // button_3
             // 
-            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            button3.FlatStyle = FlatStyle.Flat;
-            button3.Location = new Point(533, 6);
-            button3.Name = "button3";
-            button3.Size = new Size(100, 35);
-            button3.TabIndex = 5;
-            button3.TabStop = false;
-            button3.Text = "Delete";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
+            button_3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button_3.FlatStyle = FlatStyle.Flat;
+            button_3.Location = new Point(533, 6);
+            button_3.Name = "button_3";
+            button_3.Size = new Size(100, 35);
+            button_3.TabIndex = 5;
+            button_3.TabStop = false;
+            button_3.Text = "Delete";
+            button_3.UseVisualStyleBackColor = true;
+            button_3.Click += button3_Click;
             // 
             // button4
             // 
@@ -238,11 +239,23 @@
             button9.UseVisualStyleBackColor = true;
             button9.Click += button9_Click;
             // 
+            // treeView1
+            // 
+            treeView1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            treeView1.CausesValidation = false;
+            treeView1.Location = new Point(636, 164);
+            treeView1.Name = "treeView1";
+            treeView1.Size = new Size(151, 274);
+            treeView1.TabIndex = 17;
+            treeView1.TabStop = false;
+            treeView1.AfterSelect += treeView1_AfterSelect;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(treeView1);
             Controls.Add(button9);
             Controls.Add(button8);
             Controls.Add(button7);
@@ -253,7 +266,7 @@
             Controls.Add(button_square);
             Controls.Add(button_circle);
             Controls.Add(button4);
-            Controls.Add(button3);
+            Controls.Add(button_3);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(checkBox1);
@@ -275,7 +288,7 @@
         private CheckBox checkBox1;
         private Button button1;
         private Button button2;
-        private Button button3;
+        private Button button_3;
         private Button button4;
         private Button button_circle;
         private Button button_square;
@@ -287,5 +300,6 @@
         private Button button7;
         private Button button8;
         private Button button9;
+        private TreeView treeView1;
     }
 }
