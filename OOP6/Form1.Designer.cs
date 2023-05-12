@@ -44,6 +44,7 @@
             button8 = new Button();
             button9 = new Button();
             treeView1 = new TreeView();
+            button3 = new Button();
             ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
             SuspendLayout();
             // 
@@ -204,7 +205,7 @@
             // 
             button7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button7.FlatStyle = FlatStyle.Flat;
-            button7.Location = new Point(534, 88);
+            button7.Location = new Point(533, 88);
             button7.Name = "button7";
             button7.Size = new Size(100, 35);
             button7.TabIndex = 14;
@@ -250,11 +251,25 @@
             treeView1.TabStop = false;
             treeView1.AfterSelect += treeView1_AfterSelect;
             // 
+            // button3
+            // 
+            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button3.FlatStyle = FlatStyle.Flat;
+            button3.Location = new Point(427, 88);
+            button3.Name = "button3";
+            button3.Size = new Size(100, 35);
+            button3.TabIndex = 18;
+            button3.TabStop = false;
+            button3.Text = "Line";
+            button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(button3);
             Controls.Add(treeView1);
             Controls.Add(button9);
             Controls.Add(button8);
@@ -301,5 +316,6 @@
         private Button button8;
         private Button button9;
         private TreeView treeView1;
+        private Button button3;
     }
 }

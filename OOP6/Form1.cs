@@ -475,6 +475,31 @@ namespace OOP6
             e.Node.ForeColor = Color.Blue;
             Refresh();
         }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            int objectsSelected = 0;
+            foreach(CFigure figure in figures)
+            {
+                if(figure.selected) objectsSelected++;
+            }
+            if (objectsSelected == 2)
+            {
+                Line line = new Line();
+                foreach (CFigure figure in figures)
+                {
+                    if(figure.selected)
+                        line.AddFigure(figure);
+                }
+                foreach (CFigure fig in line.twofigs)
+                {
+                    figures.Remove(fig);
+                }
+                figures.Add(line);
+                Refresh();
+                SyncLtoTree();
+            }
+        }
     }
 }
 
@@ -950,23 +975,6 @@ public class CGroup : CFigure
     }
 }
 
-public class line : CFigure
-{
-    CFigure parent;
-    CFigure child;
-
-    public line(CFigure parent, CFigure child)
-    {
-        this.parent = parent;
-        this.child = child;
-    }
-
-    public override void MoveUp(Form form)
-    {
-        
-    }
-}
-
 public class SavedData
 {
     public List<string> linesToWrite = new List<string>();
@@ -982,4 +990,138 @@ public class SaverLoader
     {
         File.WriteAllLines(way, savedData.linesToWrite);
     }
+}
+
+public class Line : CFigure
+{
+    public List<CFigure> twofigs = new List<CFigure>();
+    public bool f1s = false;
+    public bool f2s = false;
+
+    public void AddFigure(CFigure figure)
+    {
+        if (twofigs.Count < 2)
+        {
+            figure.setCondition(false);
+            if (twofigs.Count == 0)
+                figure.SetColor(Color.ForestGreen);
+            else
+                figure.SetColor(Color.DarkOliveGreen);
+            twofigs.Add(figure);
+        }
+    }
+
+    public override void Cntrled(bool pressed)
+    {
+        foreach (CFigure component in twofigs)
+        {
+            component.fcntrl = pressed;
+        }
+        fcntrl = pressed;
+    }
+
+    public override void setCondition(bool cond)
+    {
+        if (!selected)
+        {
+            twofigs[0].setCondition(f1s);
+            twofigs[1].setCondition(f2s);
+            selected = cond;
+        }
+        else
+        {
+            foreach (CFigure component in twofigs)
+            {
+                component.setCondition(cond);
+            }
+            selected = cond;
+            f1s = cond;
+            f2s = cond;
+        }
+    }
+
+    public override bool MouseCheck(MouseEventArgs e)
+    {
+        if (twofigs[0].MouseCheck(e))
+        {
+            f1s = true;
+            return true;
+        }
+        else if (twofigs[1].MouseCheck(e))
+        {
+            f2s = true;
+            return true;
+        }
+        else
+        {
+            f1s = false;
+            f2s = false;
+            return false;
+        }
+    }
+
+    public override void MoveUp(Form form)
+    {
+        if (twofigs[0].CanMoveUp(form) && twofigs[0].selected && !twofigs[1].selected)
+        {
+            twofigs[1].setCondition(true);
+            twofigs[0].MoveUp(form);
+            twofigs[1].MoveUp(form);
+            twofigs[1].setCondition(false);
+        }
+        else if(twofigs[1].CanMoveUp(form) && twofigs[1].selected && !twofigs[0].selected)
+        {
+            twofigs[1].MoveUp(form);
+        }
+    }
+    public override void MoveDown(Form form)
+    {
+        if (twofigs[0].CanMoveDown(form) && twofigs[0].selected && !twofigs[1].selected)
+        {
+            twofigs[1].setCondition(true);
+            twofigs[0].MoveDown(form);
+            twofigs[1].MoveDown(form);
+            twofigs[1].setCondition(false);
+        }
+        else if (twofigs[1].CanMoveDown(form) && twofigs[1].selected && !twofigs[0].selected)
+        {
+            twofigs[1].MoveDown(form);
+        }
+    }
+    public override void MoveLeft(Form form)
+    {
+        if (twofigs[0].CanMoveLeft(form) && twofigs[0].selected && !twofigs[1].selected)
+        {
+            twofigs[1].setCondition(true);
+            twofigs[0].MoveLeft(form);
+            twofigs[1].MoveLeft(form);
+            twofigs[1].setCondition(false);
+        }
+        else if (twofigs[1].CanMoveLeft(form) && twofigs[1].selected && !twofigs[0].selected)
+        {
+            twofigs[1].MoveLeft(form);
+        }
+    }
+    public override void MoveRight(Form form)
+    {
+        if (twofigs[0].CanMoveRight(form) && twofigs[0].selected && !twofigs[1].selected)
+        {
+            twofigs[1].setCondition(true);
+            twofigs[0].MoveRight(form);
+            twofigs[1].MoveRight(form);
+            twofigs[1].setCondition(false);
+        }
+        else if (twofigs[1].CanMoveRight(form) && twofigs[1].selected && !twofigs[0].selected)
+        {
+            twofigs[1].MoveRight(form);
+        }
+    }
+
+    public override void SelfDraw(Graphics g)
+    {   
+        twofigs[0].SelfDraw(g);
+        twofigs[1].SelfDraw(g);
+        g.DrawLine(new Pen(twofigs[0].mainColor, 3), twofigs[0].coords, twofigs[1].coords);
+    }
+
 }
