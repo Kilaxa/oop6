@@ -404,6 +404,7 @@ namespace OOP6
             }
             sr.Close();
             Refresh();
+            SyncLtoTree();
         }
 
         TreeNode readdata(StreamReader sr)
